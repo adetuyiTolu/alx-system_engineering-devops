@@ -1,0 +1,84 @@
+# One Server Web Infrastructure Explanation
+
+
+
+
+---
+
+## What is a Server?
+
+A server is a physical or virtual computer that stores, processes, and delivers data or services to other computers (clients) over a network, like the Internet.
+
+In this setup, one server handles all parts of the website: serving web pages, running the application, and storing data.
+
+---
+
+## 2. What is the role of the Domain Name?
+
+The domain name (here, **foobar.com**) is a human-readable address for your website.
+
+It’s easier to remember than an IP address.
+
+It is mapped to the server’s IP address (**8.8.8.8**) via DNS so that when users enter **www.foobar.com**, their browser knows where to connect.
+
+---
+
+## 3. What type of DNS record is www in www.foobar.com?
+
+The **www** is a **CNAME** or **A record** (commonly an A record in simple setups) pointing **www.foobar.com** to the IP address **8.8.8.8**.
+
+This DNS record tells the Internet where to find the server hosting the website.
+
+---
+
+## 4. What is the role of the Web Server (Nginx)?
+
+- Nginx acts as the entry point for all HTTP(S) requests.
+- It receives incoming requests from users’ browsers.
+- It serves static content (images, CSS, JavaScript) directly.
+- For dynamic requests, it forwards them to the application server.
+- It can also handle SSL termination, caching, and load balancing (if there were multiple servers).
+
+---
+
+## 5. What is the role of the Application Server?
+
+- The application server runs your business logic or codebase.
+- It processes dynamic requests, e.g., generating HTML pages, processing form data, interacting with the database.
+- Examples: Gunicorn (Python), Node.js server, PHP-FPM.
+- It communicates with Nginx via a socket or port.
+
+---
+
+## 6. What is the role of the Database (MySQL)?
+
+- Stores and manages persistent data such as user information, posts, comments, product catalogs.
+- The application server queries the database to read or write data as needed.
+
+---
+
+## 7. How does the server communicate with the user’s computer?
+
+- Communication happens over the HTTP/HTTPS protocols.
+- The user’s browser sends an HTTP(S) request to the server's IP address resolved via DNS.
+- The server responds with HTML, CSS, JS, and other resources, which the browser renders.
+
+---
+
+## Issues with this infrastructure:
+
+### 1. Single Point of Failure (SPOF)
+
+- All services (web server, app server, DB) run on one machine.
+- If the server crashes, the website becomes unreachable.
+
+### 2. Downtime During Maintenance
+
+- Updating code or restarting services (e.g., Nginx or the app server) causes downtime.
+- Users cannot access the site during this window.
+
+### 3. Limited Scalability
+
+- Only one server handles all traffic.
+- If too many users visit simultaneously, the server can become overloaded.
+- Performance suffers and users may experience slow responses or failures.
