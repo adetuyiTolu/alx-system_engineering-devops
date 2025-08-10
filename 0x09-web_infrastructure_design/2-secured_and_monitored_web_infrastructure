@@ -1,0 +1,89 @@
+# Secured and Monitored Three-Server Web Infrastructure for www.foobar.com
+
+Link to 
+---
+
+## Components
+
+- Load Balancer (HAProxy) + Firewall + Monitoring Client  
+- Web Server (Nginx) + Application Server + Firewall + Monitoring Client  
+- MySQL Database 
+- **SSL Certificate**: Installed to serve `www.foobar.com` over HTTPS  
+- **Domain**: `foobar.com` with `www` CNAME or A record pointing to Load Balancer IP  
+
+---
+
+## Why Add These Elements?
+
+### Firewalls (3 total)  
+- Protect each server by filtering inbound/outbound traffic.  
+- Prevent unauthorized access and reduce attack surface.  
+- Each server is isolated and secured individually.
+
+### SSL Certificate for HTTPS  
+- Encrypts traffic between users and servers.  
+- Ensures data privacy and integrity.  
+- Builds user trust by showing secure padlock in browsers.
+
+### Monitoring Clients (3 total)  
+- Collect metrics, logs, and performance data from each server.  
+- Enable proactive issue detection and system health checks.  
+- Examples: Sumologic agents, Prometheus node exporters, Datadog agents.
+
+---
+
+## What Are Firewalls For?  
+- Control network traffic based on rules.  
+- Block malicious requests, allow trusted connections.  
+- Enforce network segmentation and compliance policies.
+
+---
+
+## Why Serve Traffic Over HTTPS?  
+- Encrypts data in transit to protect sensitive info (passwords, user data).  
+- Prevents eavesdropping and man-in-the-middle attacks.  
+- Required for modern browsers and SEO benefits.
+
+---
+
+## What Is Monitoring Used For?  
+- Track system health (CPU, memory, disk usage).  
+- Analyze application performance and error rates.  
+- Collect logs for troubleshooting.  
+- Alert on anomalies or failures.
+
+---
+
+## How Does the Monitoring Tool Collect Data?  
+- Agents run on each server, gathering metrics and logs.  
+- Data is sent to a centralized monitoring service. 
+- Data can be visualized in dashboards and used to trigger alerts.
+
+---
+
+## How to Monitor Web Server QPS (Queries Per Second)?  
+- Enable access logging in Nginx.  
+- Use monitoring agents or log analyzers to parse logs.  
+- Aggregate requests count per second/minute.  
+- Create dashboards and alerts for QPS thresholds.
+
+---
+
+## Issues with This Infrastructure
+
+### 1. SSL Termination at Load Balancer Level  
+- Decrypting SSL at the load balancer means traffic between load balancer and backend servers is unencrypted.  
+- This can expose sensitive data internally if the network is not secure.
+
+### 2. Single MySQL Write Node  
+- Primary database is a SPOF for writes.  
+- If it fails, write operations stop, causing downtime or degraded service.  
+- Requires setup of failover or clustering for high availability.
+
+### 3. Servers with All Components (DB, Web, App)  
+- Combining database, web, and app servers reduces modularity and scalability.  
+- Harder to isolate failures or optimize resources for each component.  
+- Limits horizontal scaling and can complicate maintenance.
+
+---
+
