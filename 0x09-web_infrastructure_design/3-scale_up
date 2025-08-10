@@ -1,0 +1,68 @@
+# Application Server vs Web Server
+
+File Link:https://github.com/adetuyiTolu/alx-system_engineering-devops/blob/main/0x09-web_infrastructure_design/scaleup.png
+
+## Infrastructure Overview
+
+This infrastructure consists of multiple servers, each dedicated to a specific component, with load balancers configured in a cluster for high availability.
+
+---
+
+## What is a Web Server?
+
+A **Web Server** primarily handles HTTP(S) requests from clients (usually browsers). It serves:
+
+- Static content such as HTML, CSS, JavaScript, images.
+- Acts as a reverse proxy, forwarding dynamic requests to the application server.
+
+**Why separate this?**
+
+- Web servers are optimized for handling many simultaneous connections for static content.
+- Offloads static content delivery from the application server.
+
+---
+
+## What is an Application Server?
+
+An **Application Server** hosts and runs the business logic and dynamic content generation.
+
+- Processes application code.
+- Generates responses (e.g., HTML pages, JSON APIs).
+- Interacts with the database to fetch/store data.
+
+**Why separate this?**
+
+- Application servers run resource-intensive tasks and can be scaled independently.
+- Provides better security by isolating the application logic.
+
+---
+
+## Why Use a Load Balancer Cluster?
+
+- Distributes incoming traffic evenly across web servers.
+- Provides fault tolerance; if one load balancer fails, the other takes over.
+- Improves availability and reliability of the system.
+
+---
+
+## Why Split Components to Separate Servers?
+
+- **Performance:** Each server can be optimized for its role (web, app, database).
+- **Scalability:** Individual layers can scale independently as traffic grows.
+- **Security:** Limits exposure by isolating components.
+- **Maintainability:** Easier to update, debug, or replace parts without impacting others.
+
+---
+
+## Summary of Additional Elements
+
+| Element                     | Reason for Adding                                     |
+|-----------------------------|------------------------------------------------------|
+| **Load Balancer Cluster**    | High availability and fault tolerance for traffic    |
+| **Dedicated Web Server**     | Efficient static content serving and request routing |
+| **Dedicated Application Server** | Focus on business logic and scalability            |
+| **Dedicated Database Server**| Data storage and management isolated from other layers |
+
+---
+
+This architecture provides a robust, scalable, and maintainable environment for hosting modern web applications.
