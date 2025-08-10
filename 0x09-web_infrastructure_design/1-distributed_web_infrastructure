@@ -1,0 +1,95 @@
+# Three Server Web Infrastructure for www.foobar.com
+
+---
+
+## Components
+
+- **Server 1**: Load Balancer (HAProxy)  
+- **Server 2**: Web Server (Nginx) + Application Server  
+- **Server 3**: Web Server (Nginx) + Application Server
+- **Database Server**: MySQL
+- **Domain**: `foobar.com` with a `www` CNAME or A record pointing to Load Balancer IP  
+
+---
+
+## Why add these elements?
+
+- **Load Balancer (HAProxy):**  
+  Distributes incoming traffic evenly between Server 2 and Server 3.  
+  Improves availability, scalability, and fault tolerance.
+
+- **Multiple Web & App Servers (Server 2 & 3):**  
+  Allows horizontal scaling by handling more traffic in parallel.  
+  Provides redundancy if one server fails.
+
+- **Database Server with Primary-Replica:**  
+  Enhances read scalability and data redundancy.  
+  Primary handles writes; replicas handle reads.
+
+- **Domain pointing to Load Balancer:**  
+  Users connect to a single IP that manages traffic efficiently.
+
+---
+
+## Load Balancer Distribution Algorithm: Round Robin
+
+- Requests are distributed cyclically between Server 2 and Server 3.  
+- For example:  
+  - Request 1 → Server 2  
+  - Request 2 → Server 3  
+  - Request 3 → Server 2  
+- Ensures even load balancing without session affinity.
+
+---
+
+## Load Balancer Modes: Active-Active vs Active-Passive
+
+- **Active-Active:**  
+  Multiple load balancers run simultaneously, sharing traffic.  
+  Maximizes availability and load distribution.
+
+- **Active-Passive:**  
+  One load balancer actively handles traffic while the other is on standby for failover.  
+  Provides redundancy but no load sharing.
+
+*This setup assumes a single load balancer (Active-Passive would require additional setup).*
+
+---
+
+## Primary-Replica Database Cluster
+
+- **Primary Node:**  
+  Handles all write operations and replicates data.
+
+- **Replica Node(s):**  
+  Serve read requests, replicating data from Primary.
+
+---
+
+## Application’s Interaction with Primary and Replica
+
+- Writes go to the Primary node.  
+- Reads are distributed to Replica nodes to reduce load on Primary.
+
+---
+
+## Issues with this Infrastructure
+
+### 1. Single Points of Failure (SPOF)
+
+- **Load Balancer:** Single HAProxy instance is a SPOF.  
+- **Database Primary:** If Primary fails and failover isn’t automated, writes are unavailable.  
+- **App Servers:** Individual servers may fail without automatic failover.
+
+### 2. Security Issues
+
+- No firewall rules to restrict access.  
+- No HTTPS configured, making traffic vulnerable to interception.
+
+### 3. No Monitoring
+
+- Lack of monitoring tools means failures or attacks might go unnoticed.
+
+---
+
+
