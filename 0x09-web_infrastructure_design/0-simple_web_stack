@@ -3,6 +3,18 @@
 
 Link to file: https://github.com/adetuyiTolu/alx-system_engineering-devops/blob/main/0x09-web_infrastructure_design/simpleserver.png
 
+## How a User Accesses the Website
+
+1. The user opens a web browser and types **www.foobar.com**.
+2. The browser looks up the IP address of **www.foobar.com** using DNS and finds **8.8.8.8**.
+3. The browser sends an HTTP request to the server at **8.8.8.8**.
+4. The web server (Nginx) receives the request.
+   - If the request is for a static file (like an image), Nginx serves it directly.
+   - If the request needs processing, Nginx passes it to the application server.
+5. The application server runs the website’s code, may query the database, and creates a response.
+6. The web server sends the response (HTML, CSS, JavaScript) back to the user's browser.
+7. The browser displays the website to the user.
+
 ---
 
 ## What is a Server?
